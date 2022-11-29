@@ -1,0 +1,278 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Helvetica;
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:"Segoe UI";
+	panose-1:2 11 5 2 4 2 4 2 2 3;}
+@font-face
+	{font-family:Georgia;
+	panose-1:2 4 5 2 5 4 5 2 3 3;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	line-height:200%;
+	font-size:12.0pt;
+	font-family:"Times New Roman",serif;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+.MsoChpDefault
+	{font-size:12.0pt;}
+.MsoPapDefault
+	{line-height:200%;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink="#954F72" style='word-wrap:break-word'>
+
+<div class=WordSection1>
+
+<p class=MsoNormal style='margin-top:.1in;line-height:30.0pt;background:white'><b><span
+style='font-size:24.0pt;font-family:"Helvetica",sans-serif;color:#292929;
+letter-spacing:-.2pt'>Real-Time Facial Expression Emoji Mapping with a CNN</span></b></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>How much of your life has been wasted searching for the right emoji?</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Seconds? Minutes? Hours??</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>We want to leverage machine learning to take that time back for
+ourselves. With a Convolutional Neural Network, we can look at an image of the
+user’s face in real time, and suggest a list of emojis that they might be
+looking for.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>We split this project into three parts:</span></p>
+
+<p class=MsoNormal style='margin-top:25.7pt;margin-right:0in;margin-bottom:
+0in;margin-left:82.5pt;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+21.0pt;background:white'><span style='font-size:15.0pt;font-family:"Georgia",serif;
+color:#292929;letter-spacing:-.05pt'>1.</span><span style='font-size:7.0pt;
+color:#292929;letter-spacing:-.05pt'>&nbsp;&nbsp;&nbsp; </span><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Designing and training a model to map face images to emotional
+probability distributions.</span></p>
+
+<p class=MsoNormal style='margin-top:13.7pt;margin-right:0in;margin-bottom:
+0in;margin-left:82.5pt;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+21.0pt;background:white'><span style='font-size:15.0pt;font-family:"Georgia",serif;
+color:#292929;letter-spacing:-.05pt'>2.</span><span style='font-size:7.0pt;
+color:#292929;letter-spacing:-.05pt'>&nbsp;&nbsp; </span><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Connecting the model to a system that can isolate and process a user’s
+face from a webcam image in real-time.</span></p>
+
+<p class=MsoNormal style='margin-top:13.7pt;margin-right:0in;margin-bottom:
+0in;margin-left:82.5pt;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+21.0pt;background:white'><span style='font-size:15.0pt;font-family:"Georgia",serif;
+color:#292929;letter-spacing:-.05pt'>3.</span><span style='font-size:7.0pt;
+color:#292929;letter-spacing:-.05pt'>&nbsp;&nbsp; </span><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Creating a robust, sensible mapping system between the model’s
+predicted outputs and unicode emojis.</span></p>
+
+<p class=MsoNormal style='margin-top:24.6pt;line-height:21.0pt;background:white'><b><span
+style='font-size:16.5pt;font-family:"Helvetica",sans-serif;color:#292929'>Designing
+and Training the Model</span></b></p>
+
+<p class=MsoNormal style='margin-top:10.3pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Our first step, of course, was data.</span></p>
+
+<p class=MsoNormal style='line-height:normal;background:white'><span
+style='font-size:13.5pt;font-family:"Segoe UI",sans-serif;color:black'><img
+width=625 height=132 src="Emoiji%20CNN_files/image002.png"></span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>We used&nbsp;<a
+href="https://www.kaggle.com/datasets/msambare/fer2013?select=train"
+target="_blank">a dataset from Kaggle</a>&nbsp;composed of roughly 30,000 48x48
+grayscale images of faces, each labeled with one of seven emotions: angry, disgusted,
+fear, happy, neutral, sad, and surprised.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>To build our model, we used a series of convolutional and max pooling
+layers, with some dropout layers to mitigate overfitting.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-family:"Courier New";color:#292929;letter-spacing:-.25pt'><img
+border=0 width=625 height=668 id="Picture 5" src="emoji_cnn_files/image001.gif"></span><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>At the end of our model, we have two dense layers, resulting in an
+output size of 7 (one output for each possible emotion).</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Here is the graph of train/test accuracy after 50 epochs of training:</span></p>
+
+<p class=MsoNormal style='line-height:normal;background:white'><span
+style='font-size:13.5pt;font-family:"Segoe UI",sans-serif;color:black'><img
+border=0 width=624 height=442 src="Emoiji%20CNN_files/image003.jpg"></span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>And here is the confusion matrix of the model’s predictions:</span></p>
+
+<p class=MsoNormal style='line-height:normal;background:white'><span
+style='font-size:13.5pt;font-family:"Segoe UI",sans-serif;color:black'><img
+border=0 width=624 height=601 src="Emoiji%20CNN_files/image004.jpg"></span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Looks pretty good! It’s not perfect, but if we look closely at the predictions
+that are incorrect, they seem to make sense. For example, it seems reasonable
+that the network would occasionally confuse anger and disgust, or sadness and
+fear. And it performs quite well with surprise, and excellently with happiness!</span></p>
+
+<p class=MsoNormal style='margin-top:24.6pt;line-height:21.0pt;background:white'><b><span
+style='font-size:16.5pt;font-family:"Helvetica",sans-serif;color:#292929'>Running
+the Model in Real Time</span></b></p>
+
+<p class=MsoNormal style='margin-top:10.3pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>So we have a pretty good model that seems to have a reasonable
+understanding of human facial expressions.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Next up: real-time predictions.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>The natural first step for this would be to take whatever the webcam
+sees, and plug it into the model in real time. Unfortunately, this method has
+two issues:</span></p>
+
+<p class=MsoNormal style='margin-top:25.7pt;margin-right:0in;margin-bottom:
+0in;margin-left:82.5pt;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+21.0pt;background:white'><span style='font-size:15.0pt;font-family:"Georgia",serif;
+color:#292929;letter-spacing:-.05pt'>1.</span><span style='font-size:7.0pt;
+color:#292929;letter-spacing:-.05pt'>&nbsp;&nbsp;&nbsp; </span><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>The model can only process 48x48 grayscale images.</span></p>
+
+<p class=MsoNormal style='margin-top:13.7pt;margin-right:0in;margin-bottom:
+0in;margin-left:82.5pt;margin-bottom:.0001pt;text-indent:-.25in;line-height:
+21.0pt;background:white'><span style='font-size:15.0pt;font-family:"Georgia",serif;
+color:#292929;letter-spacing:-.05pt'>2.</span><span style='font-size:7.0pt;
+color:#292929;letter-spacing:-.05pt'>&nbsp;&nbsp; </span><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>All of the training images are centered on the face.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>The first problem seems solvable’we just have to scale down the webcam
+image, resize it a bit, and convert it to grayscale. The second problem,
+however, is a bit trickier. We need to somehow isolate where the face is in the
+picture. (And consider that there might be more than one face, or none at all!)</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>To do this, we use a library called&nbsp;<b>OpenCV</b>. OpenCV is an
+open source library that has hundreds of computer vision algorithms. The only
+one we’ll be using is their&nbsp;<i>frontal face cascade classifier</i>, which
+will detect the positions of all the faces in the image.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>We then extract that portion of the image, and do all the necessary
+scaling, cropping, and recoloring to get the image to fit into the model. Here
+is the code:</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-family:"Courier New";color:#292929;letter-spacing:-.25pt'><img
+border=0 width=624 height=633 id="Picture 8" src="emoji_cnn_files/image002.gif"></span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'><img border=0 width=624 height=511 id="Picture 9"
+src="emoji_cnn_files/image003.gif"></span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Awesome! Now we can see the model’s predicted probability distribution
+in real time.</span></p>
+
+<p class=MsoNormal style='margin-top:24.6pt;line-height:21.0pt;background:white'><b><span
+style='font-size:16.5pt;font-family:"Helvetica",sans-serif;color:#292929'>Mapping
+to Emojis</span></b></p>
+
+<p class=MsoNormal style='margin-top:10.3pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>But how do we map this distribution to potential emojis?</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>A basic approach would be to assign an emoji to each of the seven
+emotions, and simply suggest emojis based on which emotion was predicted as
+most likely.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>But we can do better! Instead, we can define&nbsp;<i>distributions</i>&nbsp;of
+emotions for a lot of different emojis. Then when we run the prediction, we can
+pick the emojis that have the most similar distributions to the user’s face.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Think of it this way: each emoji is given seven values: one for anger,
+one for disgust, one for fear, etc. Similarly, the model’s predicted emotions
+of the user are also seven values. Now if we treat these emojis and the
+prediction as points in 7-dimensional space, we can easily calculate which
+emojis are closest to the user’s facial expression!</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>The last problem: how do we generate the values for the emojis? And of
+course, the answer is to just put them through the model! Not literally,
+though. The model was trained on human faces, not perfectly circular yellow
+cartoon faces. So instead of putting the emojis themselves into the model, we
+selected images from our training data that we thought best represented each
+emoji, and set aside a copy of each image with its emoji label.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Then during prediction, all we need to do is iterate over those images,
+and figure out which produce output most similar to the user’s generated distribution.</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'>Tada! We have a working model!</span></p>
+
+<p class=MsoNormal style='margin-top:24.0pt;line-height:24.0pt;background:white'><span
+style='font-size:15.0pt;font-family:"Georgia",serif;color:#292929;letter-spacing:
+-.05pt'><a href="https://github.com/yana-monet/Emoiji-CNN" target="_blank">https://github.com/yana-monet/Emoiji-CNN</a></span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>
